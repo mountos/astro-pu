@@ -1,3 +1,11 @@
+/**
+ * Astro Pu (璞) Template
+ *
+ * @author    Mountos (https://mountos.com)
+ * @license   MIT
+ * @see       https://github.com/mountos/astro-pu
+ */
+
 // @ts-check
 import { defineConfig } from 'astro/config';
 import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
