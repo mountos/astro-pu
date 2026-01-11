@@ -236,3 +236,12 @@ footer {
   width: 22px;
   height: 22px;
 }
+
+/* Make images in markdown content responsive */
+.content img {
+  max-width: 100%;
+  height: auto;
+  display: block; /* To remove extra space below image */
+  margin-left: auto; /* Center images */
+  margin-right: auto; /* Center images */
+}
