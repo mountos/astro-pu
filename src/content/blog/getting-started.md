@@ -1,13 +1,13 @@
 ---
-title: "Welcome to Mountos xAstro Template"
+title: "Welcome to Astro Template PU 璞"
 description: "This is an example article introducing the features of this template. Here you can learn how to write your content using Markdown."
 pubDate: 2026-01-05T12:00:00Z
 categories: ["Tutorial"]
 tags: ["Astro", "Template", "Markdown"]
-heroImage: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=2070&auto=format&fit=crop"
+heroImage: "../../assets/shared/MOUNTOS-Feature-HeroImage.png"
 ---
 
-Welcome to your new website! This is a demo page built using the [Mountos xAstro Basic Template](https://mountos.com). You are free to edit or delete this article.
+Welcome to your new website! This is a demo page built using the [Mountos Astro Basic Template: PU 璞](https://pu.code.mountos.com). You are free to edit or delete this article.
 
 The purpose of this article is to showcase the various content formats you can write using Markdown, as well as the built-in features of this template.
 
@@ -52,7 +52,7 @@ greet('Astro');
 
 Inserting images in Markdown is also very simple.
 
-![This is an ALT description for the image](https://images.unsplash.com/photo-1588392382834-a891154bca4d?q=80&w=2070&auto=format&fit=crop)
+![This is an ALT description for the image](../../assets/shared/MOUNTOS-Feature-HeroImage.png)
 
 ---
 
