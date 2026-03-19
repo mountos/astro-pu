@@ -1,6 +1,7 @@
 [Read in English](./README.md)
 
 # Astro Pu (璞) - 一個優雅的 Astro 入門模板
+**線上預覽：[pu.code.mountos.com](https://pu.code.mountos.com)**
 
 **Pu (璞)**，未經雕琢的玉石，代表著純粹的潛力與內在的美好。
 
