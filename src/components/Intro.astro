@@ -8,7 +8,7 @@
 
 <section class="intro">
   <div class="intro-container">
-    <div class="intro-badge">Astro PU (無垢玉)</div>
+    <div class="intro-badge">Astro Pu (璞)</div>
     
     <div class="intro-grid">
       <!-- English Section -->
@@ -26,7 +26,7 @@
       <div class="intro-col zh">
         <h2 class="intro-title-zh">為創作者而生的完美 <span class="accent">Astro</span> 部落格範本</h2>
         <p class="intro-subtitle">
-          追求速度、美感與 SEO 的極致平衡。基於 Astro 6 的高性能與東方美學設計，助您在中華民國 🇹🇼 快速建立專業、優雅的首選平台。
+          追求速度、美感與 SEO 的極致平衡。基於 Astro 6 的高性能與東方美學設計，助您快速且優雅地建立專業平台。
         </p>
       </div>
     </div>
@@ -76,7 +76,7 @@
     right: -50px;
     width: 250px;
     height: 250px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--color-primary-soft) 0%, transparent 70%);
     border-radius: 50%;
     z-index: 0;
   }
@@ -88,8 +88,8 @@
 
   .intro-badge {
     display: inline-block;
-    background: rgba(16, 185, 129, 0.08);
-    color: #059669;
+    background: var(--color-primary-soft);
+    color: var(--color-primary-dark);
     padding: 0.4rem 1.25rem;
     border-radius: 9999px;
     font-size: 0.85rem;
@@ -97,7 +97,7 @@
     margin-bottom: 3rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    border: 1px solid rgba(16, 185, 129, 0.15);
+    border: 1px solid var(--color-primary-soft);
   }
 
   .intro-grid {
@@ -134,7 +134,7 @@
   }
 
   .accent {
-    color: #059669;
+    color: var(--color-primary-dark);
     position: relative;
     display: inline-block;
   }
@@ -146,7 +146,7 @@
     left: 0;
     width: 100%;
     height: 6px;
-    background: rgba(16, 185, 129, 0.1);
+    background: var(--color-primary-soft);
     z-index: -1;
   }
 
@@ -176,7 +176,7 @@
   }
 
   .feature-item svg {
-    color: #10b981;
+    color: var(--color-primary);
     opacity: 0.8;
   }
 
