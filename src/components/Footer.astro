@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import mountosLogo from '../assets/shared/Mountos-Logo.png';
 
 const posts = await getCollection('blog');
 const allCategories = posts.flatMap(post => post.data.categories);
@@ -42,7 +44,10 @@ const today = new Date();
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="copyright">&copy; {today.getFullYear()} Your Site Name. Powered by <a href="https://mountos.com/" target="_blank">Mountos</a>.</p>
+      <p class="copyright">
+        <Image src={mountosLogo} alt="Mountos Logo" width={24} height={24} class="footer-logo" />
+        &copy; {today.getFullYear()} Your Site Name. Powered by <a href="https://mountos.com/" target="_blank">Mountos</a>.
+      </p>
       <div class="footer-socials">
         <a href="#" class="social-link" aria-label="Facebook" rel="nofollow noopener noreferrer" target="_blank">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
@@ -73,3 +78,12 @@ const today = new Date();
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-logo {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-top: -2px;
+  }
+</style>
