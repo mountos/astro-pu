@@ -1,4 +1,4 @@
-[閱讀中文版說明 (Read in Chinese)](./README.zh-TW.md)
+[閱讀中文版說明 (Read in Chinese)](./README.zh-TW.md) | [日本語で読む (Read in Japanese)](./README.ja.md)
 
 # Astro Pu - An Elegant Astro Starter Template
 **Live Demo: [pu.code.mountos.com](https://pu.code.mountos.com)**

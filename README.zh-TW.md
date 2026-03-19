@@ -1,4 +1,4 @@
-[Read in English](./README.md)
+[Read in English](./README.md) | [日本語で読む (Read in Japanese)](./README.ja.md)
 
 # Astro Pu (璞) - 一個優雅的 Astro 入門模板
 **線上預覽：[pu.code.mountos.com](https://pu.code.mountos.com)**
