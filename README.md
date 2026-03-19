@@ -13,17 +13,18 @@ This template, crafted by **Mountos** ([mountos.com](https://mountos.com)), is d
 
 This template is more than just a basic skeleton; it comes with several advanced features designed for high-quality content websites:
 
-*   **🚀 Astro v4+**: Built with the latest Astro engine for extreme loading speeds and a superior development experience.
+*   **🚀 Astro v6+**: Built with the latest Astro engine for extreme loading speeds and a superior development experience.
 *   **🎨 Elegant & Minimalist Design**: A clean, content-focused layout with ample room for style customization.
 *   **📱 Fully Responsive Design (RWD)**: A flawless viewing experience on desktops, tablets, and mobile phones.
-*   **✍️ Content-Driven**: Easily manage all your posts in Markdown format within `src/content/` using Astro's Content Collections.
+*   **✍️ Content Layer Driven**: Powered by Astro 6's **Content Layer**. Manage all your posts efficiently in `src/content.config.ts` using modern loaders.
 *   **SEO Optimized**:
     *   **Automatic Sitemap**: Generates `sitemap.xml` automatically using `@astrojs/sitemap`.
     *   **Semantic Tags**: Correct usage of `H1` and other heading tags, optimized for both the homepage and post pages.
+    *   **Static Assets for SEO**: Logos and essential assets are stored in `public/images/` to maintain clean, searchable URLs without hashing.
     *   **External Link Handling**: Automatically adds `rel="nofollow noopener noreferrer"` to all external links.
     *   **`robots.txt`**: Includes a `robots.txt` template that is both SEO-friendly and blocks AI crawlers from training on your content.
     *   **Meta Descriptions**: All pages have pre-filled or dynamically generated descriptions.
-*   **⚡️ View Transitions**: Built-in Astro View Transitions for smooth page-to-page navigation effects.
+*   **⚡️ Client Router**: Built-in Astro **Client Router** (formerly View Transitions) for smooth, modern page-to-page navigation.
 *   **📖 Dynamic Table of Contents (ToC)**: A floating ToC is automatically generated for long articles.
 *   **📄 Pagination**: The main post list is automatically paginated.
 *   **🧩 Built-in Pages**: Includes templates for common pages like "About," "Privacy Policy," and "404."
@@ -32,6 +33,9 @@ This template is more than just a basic skeleton; it comes with several advanced
     *   A placeholder for a "❤️ Donate" link is available in the footer for you to accept community support.
 
 ## 🚀 Quick Start
+
+> [!IMPORTANT]
+> **Prerequisites**: Node.js **v22.12.0** or higher is required for Astro 6.
 
 1.  **Use This Template**
     *   Click the `Use this template` > `Create a new repository` button on the top right of the GitHub page.
@@ -64,12 +68,14 @@ Before you start writing your own content, be sure to modify the following setti
 4.  **Site Title & Description (`src/components/Header.astro`)**
     *   Open this file and modify the default values for `siteTitle` and `siteDescription`.
 
-5.  **Footer Information (`src/components/Footer.astro`)**
+5.  **Footer Logo & Information (`src/components/Footer.astro`)**
+    *   Your site logo is located at `public/images/Mountos-Logo.png`. Replace this file with your own logo to maintain a clean SEO URL.
     *   Modify the site name and introduction in the `footer-intro` section.
     *   Replace `Your Site Name` in the `copyright` section with your site name.
     *   In the "Support Us" menu, replace `href="#"` in the donation link with your own link.
 
 6.  **Start Writing!**
+    *   Your content configuration is defined in `src/content.config.ts`.
     *   All your posts are located in the `src/content/blog/` folder.
     *   Refer to the `getting-started.md` example post to learn the format and start writing your own `.md` or `.mdx` files.
 
