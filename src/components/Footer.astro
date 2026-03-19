@@ -13,7 +13,10 @@ const today = new Date();
   <div class="footer-container">
     <div class="footer-main">
       <div class="footer-intro">
-        <h3>Your Website</h3>
+        <h3>
+          <Image src={mountosLogo} alt="Mountos Logo" width={24} height={24} class="footer-logo" />
+          Your Website
+        </h3>
         <p>Write a brief introduction to your website here. This helps visitors quickly understand your site's theme.</p>
       </div>
       <div class="footer-menus">
@@ -45,7 +48,6 @@ const today = new Date();
     </div>
     <div class="footer-bottom">
       <p class="copyright">
-        <Image src={mountosLogo} alt="Mountos Logo" width={24} height={24} class="footer-logo" />
         &copy; {today.getFullYear()} Your Site Name. Powered by <a href="https://mountos.com/" target="_blank">Mountos</a>.
       </p>
       <div class="footer-socials">
