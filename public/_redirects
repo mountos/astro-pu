@@ -30,4 +30,4 @@
 # -----------------------------------------------------------------------------
 # --- Add your redirect rules below | 請在下方加入您的轉址規則 ---
 
-/sample https://mountos.com 301
+/powered https://mountos.com 301

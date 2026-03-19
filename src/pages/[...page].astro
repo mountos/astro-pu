@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Pagination from '../components/Pagination.astro';
+import Intro from '../components/Intro.astro';
 import type { Page } from 'astro';
 
 export async function getStaticPaths({ paginate }) {
@@ -21,6 +22,7 @@ const pageTitle = "Mountos | Blog";
 const pageDescription = `The latest news from Mountos Institute${page.currentPage > 1 ? ` | Page ${page.currentPage}` : ''}`;
 ---
 <Layout title={pageTitle} description={pageDescription}>
+	{page.currentPage === 1 && <Intro slot="hero" />}
 	<section class="post-list">
 		<h2>Latest Posts</h2>
 		<ul>

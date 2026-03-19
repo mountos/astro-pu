@@ -1,0 +1,147 @@
+---
+/* 
+ * Intro Component for Astro PU (Uncarved Jade)
+ * Specifically designed for SEO and a premium "WOW" first impression.
+ */
+---
+
+<section class="intro">
+  <div class="intro-content">
+    <div class="intro-badge">Astro PU (無垢玉)</div>
+    <h1 class="intro-title">為創作者而生的完美 <span class="accent">Astro</span> 部落格範本</h1>
+    <p class="intro-subtitle">
+      追求速度、美感與 SEO 的極致平衡。基於 Astro 6 的高性能連結與東方美學設計，助您在中華民國 🇹🇼 快速建立專業、優雅的首選平台。
+    </p>
+    <div class="intro-features">
+      <span class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>
+        高性能載入
+      </span>
+      <span class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        SEO 極優化
+      </span>
+      <span class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        內容分層支援
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    background-color: #fdfcfb;
+    border-bottom: 1px solid #eee;
+    padding: 6rem 1.5rem 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: calc(-1 * var(--header-height)); /* Negative margin back to header height if needed */
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative background element (Jade/Oriental feel) */
+  .intro::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  .intro-content {
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 1s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-badge {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .intro-title {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 1.5rem;
+    color: #111;
+  }
+
+  .accent {
+    color: #059669;
+    position: relative;
+    display: inline-block;
+  }
+
+  .accent::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(16, 185, 129, 0.15);
+    z-index: -1;
+  }
+
+  .intro-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #4b5563;
+    margin-bottom: 2.5rem;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .intro-features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .feature-item svg {
+    color: #10b981;
+  }
+
+  @media (max-width: 640px) {
+    .intro {
+      padding: 5rem 1rem 3rem;
+    }
+    .intro-features {
+      gap: 1rem;
+    }
+  }
+</style>
