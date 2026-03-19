@@ -84,9 +84,23 @@ header {
   padding: 0 1.5rem;
 }
 
-.site-branding a {
+.site-branding a.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   text-decoration: none;
   color: inherit;
+}
+
+.site-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.site-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .site-title {

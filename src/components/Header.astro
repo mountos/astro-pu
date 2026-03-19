@@ -8,18 +8,21 @@ const {
 <header>
   <div class="header-container">
     <div class="site-branding">
-      <a href="/">
-        {isHomepage ? (
-          <h1 class="site-title">{siteTitle}</h1>
-        ) : (
-          <div class="site-title">{siteTitle}</div>
-        )}
-        <p class="site-description">{siteDescription}</p>
+      <a href="/" class="logo-link">
+        <img src="/images/Mountos-Logo.png" alt="Mountos Logo" class="site-logo" />
+        <div class="site-text">
+          {isHomepage ? (
+            <h1 class="site-title">{siteTitle}</h1>
+          ) : (
+            <div class="site-title">{siteTitle}</div>
+          )}
+          <p class="site-description">{siteDescription}</p>
+        </div>
       </a>
     </div>
     <nav class="nav-buttons">
-      <a href="#" class="nav-link">Button One</a>
-      <a href="#" class="nav-link">Button Two</a>
+      <a href="https://github.com/mountos/astro-pu" class="nav-link" rel="nofollow">GitHub</a>
+      <a href="https://mountos.com/contact/" class="nav-link">Contact</a>
       <a href="/search" class="nav-link search-link" aria-label="Search">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
           <circle cx="11" cy="11" r="8"></circle>

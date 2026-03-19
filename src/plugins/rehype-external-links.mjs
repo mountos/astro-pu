@@ -13,9 +13,14 @@ export default function rehypeExternalLinks() {
 
         // Check if it's an external link
         if (url.startsWith('http://') || url.startsWith('https://')) {
-          // You might want to add a check here to exclude your own domain
-
-          node.properties.rel = 'nofollow noopener noreferrer';
+          // Exclude ONLY owned mountos.com domains from nofollow
+          const isOwned = url.includes('mountos.com');
+          
+          if (!isOwned) {
+            node.properties.rel = 'nofollow noopener noreferrer';
+          } else {
+            node.properties.rel = 'noopener noreferrer';
+          }
           node.properties.target = '_blank';
         }
       }
