@@ -1,5 +1,5 @@
 ---
-/* 
+/*
  * Intro Component for Astro PU (Uncarved Jade)
  * Specifically designed for SEO and a premium "WOW" first impression.
  * Now supporting a dual-language (EN/ZH) split layout.
@@ -8,14 +8,18 @@
 
 <section class="intro">
   <div class="intro-container">
-    <div class="intro-badge">Astro Pu (璞)</div>
-    
+    <div class="intro-badge">Astro Pu 璞</div>
+
     <div class="intro-grid">
       <!-- English Section -->
       <div class="intro-col en">
-        <h1 class="intro-title">The Perfect <span class="accent">Astro</span> Blog Template for Creators</h1>
+        <h1 class="intro-title">
+          The Perfect <span class="accent">Astro</span> Blog Template for Creators
+        </h1>
         <p class="intro-subtitle">
-          A harmonious balance of speed, aesthetics, and SEO. Built with Astro 6 and inspired by oriental design, it helps you build a professional platform quickly and elegantly.
+          A harmonious balance of speed, aesthetics, and SEO. Built with Astro 6
+          and inspired by oriental design, it helps you build a professional
+          platform quickly and elegantly.
         </p>
       </div>
 
@@ -24,24 +28,66 @@
 
       <!-- Chinese Section -->
       <div class="intro-col zh">
-        <h2 class="intro-title-zh">為創作者而生的完美 <span class="accent">Astro</span> 部落格範本</h2>
+        <h2 class="intro-title-zh">
+          為創作者而生的完美 <span class="accent">Astro</span> 部落格範本
+        </h2>
         <p class="intro-subtitle">
-          追求速度、美感與 SEO 的極致平衡。基於 Astro 6 的高性能與東方美學設計，助您快速且優雅地建立專業平台。
+          追求速度、美感與 SEO 的極致平衡。基於 Astro 6
+          的高性能與東方美學設計，助您快速且優雅地建立專業平台。
         </p>
       </div>
     </div>
 
     <div class="intro-features">
       <span class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+        </svg>
         高性能載入 / High Performance
       </span>
       <span class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+          ></polygon>
+        </svg>
         SEO 極優化 / SEO Optimized
       </span>
       <span class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line
+            x1="3"
+            y1="9"
+            x2="21"
+            y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
         內容分層 / Content Layer
       </span>
     </div>
@@ -70,20 +116,30 @@
 
   /* Decorative background element */
   .intro::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50px;
     right: -50px;
     width: 250px;
     height: 250px;
-    background: radial-gradient(circle, var(--color-primary-soft) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      var(--color-primary-soft) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
     z-index: 0;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .intro-badge {
@@ -120,7 +176,8 @@
     min-height: 200px;
   }
 
-  .intro-title, .intro-title-zh {
+  .intro-title,
+  .intro-title-zh {
     font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 800;
     line-height: 1.2;
@@ -140,7 +197,7 @@
   }
 
   .accent::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 4px;
     left: 0;
@@ -193,7 +250,8 @@
     .intro-badge {
       margin-bottom: 2rem;
     }
-    .intro-title, .intro-title-zh {
+    .intro-title,
+    .intro-title-zh {
       font-size: 2.25rem;
     }
   }
@@ -207,7 +265,8 @@
       flex-direction: column;
       align-items: center;
     }
-    .intro-title, .intro-title-zh {
+    .intro-title,
+    .intro-title-zh {
       font-size: 1.85rem;
     }
   }

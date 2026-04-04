@@ -10,7 +10,7 @@ interface Props {
 }
 
 const {
-  title = "Astro Pu (璞)",
+  title = "Astro Pu 璞",
   description = "Official website of Mountos Institute",
 } = Astro.props;
 
@@ -29,7 +29,11 @@ const isHomepage = Astro.url.pathname === "/";
     <ClientRouter />
   </head>
   <body>
-    <Header isHomepage={isHomepage} siteTitle={title} siteDescription={description} />
+    <Header
+      isHomepage={isHomepage}
+      siteTitle={title}
+      siteDescription={description}
+    />
     <slot name="hero" />
     <main class="main-content">
       <slot />
