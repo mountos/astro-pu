@@ -1,43 +1,51 @@
 ---
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { ClientRouter } from "astro:transitions";
-import "../styles/global.css";
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/global.css';
 
 interface Props {
-  title: string;
-  description?: string;
+	title: string;
+	description?: string;
+	image?: string;
+	type?: 'website' | 'article';
+	article?: {
+		publishedTime: string;
+		modifiedTime?: string;
+		tags?: string[];
+		author?: string;
+	};
 }
 
-const {
-  title = "Astro Pu 璞",
-  description = "Official website of Mountos Institute",
+const { 
+	title = 'Astro Pu', 
+	description = '開啟你的 AI 搜尋優化時代。',
+	image,
+	type,
+	article
 } = Astro.props;
 
-const isHomepage = Astro.url.pathname === "/";
+const isHomepage = Astro.url.pathname === '/';
 ---
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <ClientRouter />
-  </head>
-  <body>
-    <Header
-      isHomepage={isHomepage}
-      siteTitle={title}
-      siteDescription={description}
-    />
-    <slot name="hero" />
-    <main class="main-content">
-      <slot />
-    </main>
-    <Footer />
-  </body>
+	<head>
+		<SEO 
+			title={title} 
+			description={description} 
+			image={image} 
+			type={type} 
+			article={article} 
+		/>
+		<ViewTransitions />
+	</head>
+	<body>
+		<Header isHomepage={isHomepage} />
+		<slot name="hero" />
+		<main class="main-content">
+			<slot />
+		</main>
+		<Footer />
+	</body>
 </html>

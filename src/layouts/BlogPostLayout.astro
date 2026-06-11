@@ -21,7 +21,7 @@ const primaryCategory = frontmatter.categories?.[0];
   </div>
 
   <div class="blog-container">
-    <article class="post">
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
       <div class="post-meta-bar">
         <div class="meta-item">
           <span class="label">Posted on</span>
@@ -29,7 +29,7 @@ const primaryCategory = frontmatter.categories?.[0];
         </div>
       </div>
 
-      <div class="content">
+      <div class="content" itemprop="articleBody">
         <slot />
       </div>
 
