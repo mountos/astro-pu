@@ -2,7 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SEO from '../components/SEO.astro';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 
 interface Props {
@@ -38,7 +38,7 @@ const isHomepage = Astro.url.pathname === '/';
 			type={type} 
 			article={article} 
 		/>
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 	<body>
 		<Header isHomepage={isHomepage} />
