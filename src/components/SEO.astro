@@ -166,6 +166,26 @@ if (type === 'article' && article) {
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- PWA Meta & Manifest -->
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#1a1a1a" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content={title} />
+<link rel="apple-touch-icon" href="/favicon.png" />
+
+<!-- Register Service Worker -->
+<script is:inline>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+        .catch(err => console.error('PWA Service Worker registration failed:', err));
+    });
+  }
+</script>
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
