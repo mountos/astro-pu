@@ -6,8 +6,8 @@
  * @see       https://github.com/mountos/astro-pu
  */
 
-// @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
 import sitemap from '@astrojs/sitemap';
 
@@ -17,6 +17,8 @@ export default defineConfig({
   site: 'https://pu.code.mountos.com',
   integrations: [sitemap()],
   markdown: {
-    rehypePlugins: [rehypeExternalLinks],
+    processor: unified({
+      rehypePlugins: [rehypeExternalLinks],
+    }),
   },
 });

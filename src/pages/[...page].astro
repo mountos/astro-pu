@@ -32,7 +32,7 @@ const pageDescription = `The latest news from Mountos Institute${
       {
         page.data.map((post) => (
           <li>
-            <a href={`/blog/${post.id}/`}>
+            <a href={`/blog/${post.id.replace(/\.mdx?$/, '')}/`}>
               <span class="post-title">{post.data.title}</span>
               <span class="post-date">
                 {post.data.pubDate.toLocaleDateString("en-US")}
