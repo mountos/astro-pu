@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Contact Us | Your Site Name"
+  description="Contact us regarding any inquiries, feedback, or suggestions."
+>
+  <div class="static-page">
+    <h1>Contact Us</h1>
+    <div class="content">
+      <p class="intro-greeting">Get in touch with our team.</p>
+
+      <form id="contact-form" class="universal-contact-form">
+        <input type="hidden" name="site" value="astro-pu" />
+        <input type="hidden" name="type" value="general" />
+
+        <div class="form-group">
+          <label for="name">Your Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Enter your full name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required placeholder="your.email@example.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject *</label>
+          <input type="text" id="subject" name="subject" required placeholder="Subject of your message" />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" rows="6" required placeholder="Write your message here..."></textarea>
+        </div>
+
+        <button type="submit" id="submit-btn" class="submit-button">
+          ✉️ Send Message
+        </button>
+
+        <div id="form-response" class="response-message"></div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const responseElem = document.getElementById('form-response');
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Sending...';
+        if (responseElem) responseElem.style.display = 'none';
+
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+
+        // 取得進階分析與防機器人數據
+        try {
+          const traceRes = await fetch('/cdn-cgi/trace');
+          const traceText = await traceRes.text();
+          const ipMatch = traceText.match(/ip=(.+)/);
+          const locMatch = traceText.match(/loc=(.+)/);
+          
+          if (ipMatch) payload.ip = ipMatch[1].trim();
+          if (locMatch) payload.country = locMatch[1].trim();
+
+          payload.userAgent = navigator.userAgent;
+          payload.language = navigator.language;
+          payload.screen = `${window.screen.width}x${window.screen.height}`;
+          payload.referrer = document.referrer || 'Direct';
+          payload.url = window.location.href;
+          
+          payload.timeToSubmit = Math.round(performance.now() / 1000) + 's';
+        } catch (e) {}
+
+        try {
+          const res = await fetch('https://script.google.com/macros/s/AKfycbzyX_hBo19vRFj5yn3WZqTGk4_gN58Y6g0fQH4IOKnZyJm2tGnCp9inNZt-rk1JssoF/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+
+          if (responseElem) {
+            responseElem.style.display = 'block';
+            if (result.success) {
+              responseElem.className = 'response-message success';
+              responseElem.textContent = '✅ ' + result.message;
+              form.reset();
+            } else {
+              responseElem.className = 'response-message error';
+              responseElem.textContent = '❌ ' + (result.error || 'Failed to send message. Please try again.');
+            }
+          }
+        } catch (err) {
+          if (responseElem) {
+            responseElem.style.display = 'block';
+            responseElem.className = 'response-message error';
+            responseElem.textContent = '❌ Network error. Please try again later.';
+          }
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '✉️ Send Message';
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .static-page {
+    max-width: 680px;
+    margin: auto;
+    padding: 2rem 1rem;
+  }
+  .static-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .intro-greeting {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .universal-contact-form {
+    background: var(--color-bg-offset, #fcfcfc);
+    border: 1px solid var(--color-border, #eee);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  .submit-button {
+    width: 100%;
+    background-color: var(--color-primary, #111);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .submit-button:hover {
+    opacity: 0.9;
+  }
+  .response-message {
+    margin-top: 1.25rem;
+    padding: 0.9rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    display: none;
+  }
+  .response-message.success {
+    background-color: #e6f4ea;
+    color: #137333;
+  }
+  .response-message.error {
+    background-color: #fce8e6;
+    color: #c5221f;
+  }
+</style>
