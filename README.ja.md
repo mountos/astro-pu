@@ -83,7 +83,7 @@
 
 このテンプレートが気に入った場合は、フッターの "Powered by Mountos" リンクを残すか、プロジェクトで言及することを検討してください。皆様のサポートが、私たちの継続的な創作の原動力となります！
 
-[コーヒーを一杯奢る](https://mounx.com/s/buyMacoffee) ことでも、私をサポートできます。ありがとうございます！
+<a href=\"https://buymeacoffee.com/mountos\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">コーヒーを一杯奢る</a> ことでも、私をサポートできます。ありがとうございます！
 
 ---
 

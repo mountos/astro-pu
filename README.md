@@ -83,7 +83,7 @@ Before you start writing your own content, be sure to modify the following setti
 
 If you enjoy this template, please consider keeping the "Powered by Mountos" link in your footer or mentioning it in your project. Your support is the driving force behind our continued creation!
 
-You can also support me by [buying me a coffee](https://mounx.com/s/buyMacoffee). Thank you!
+You can also support me by <a href=\"https://buymeacoffee.com/mountos\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">buying me a coffee</a>. Thank you!
 
 ---
 

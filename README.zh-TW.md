@@ -83,7 +83,7 @@
 
 如果您喜歡這個模板，請考慮在您的網站頁尾保留 "Powered by Mountos" 的連結，或是在您的專案中提及它。您的支持是我們持續創作的動力！
 
-您也可以[請我喝杯咖啡](https://mounx.com/s/buyMacoffee)，支持我的創作。謝謝您！
+您也可以<a href=\"https://buymeacoffee.com/mountos\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">請我喝杯咖啡</a>，支持我的創作。謝謝您！
 
 ---
 
