@@ -134,12 +134,14 @@ const primaryCategory = frontmatter.categories?.[0];
 
   @media (min-width: 1024px) {
     .blog-container {
-      grid-template-columns: minmax(0, 3fr) 1fr;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 5rem;
+      padding: 3.5rem 2.5rem;
     }
   }
 
   .post {
-    max-width: 720px;
+    max-width: 820px;
     width: 100%;
     justify-self: start;
   }
