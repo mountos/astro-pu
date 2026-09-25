@@ -5,24 +5,50 @@ import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  const allCategories = posts.flatMap(post => post.data.categories);
-  const uniqueCategories = [...new Set(allCategories)];
+  const catMap = new Map();
+  for (const post of posts) {
+    for (const rawCat of (post.data.categories || [])) {
+      if (!rawCat) continue;
+      const slug = rawCat.toLowerCase();
+      if (!catMap.has(slug)) {
+        catMap.set(slug, {
+          slug,
+          displayName: rawCat,
+          postCounts: new Map(),
+          posts: new Set(),
+        });
+      }
+      const entry = catMap.get(slug);
+      entry.posts.add(post);
+      entry.postCounts.set(rawCat, (entry.postCounts.get(rawCat) || 0) + 1);
+    }
+  }
 
-  return uniqueCategories.map(category => {
-    const filteredPosts = posts.filter(post => post.data.categories.includes(category));
+  return Array.from(catMap.values()).map(entry => {
+    let bestName = entry.displayName;
+    let maxCount = 0;
+    for (const [name, count] of entry.postCounts.entries()) {
+      if (count > maxCount || (count === maxCount && /[A-Z]/.test(name) && !/[A-Z]/.test(bestName))) {
+        bestName = name;
+        maxCount = count;
+      }
+    }
+
+    const filteredPosts = Array.from(entry.posts);
     return {
-      params: { category },
-      props: { posts: filteredPosts },
+      params: { category: entry.slug },
+      props: { posts: filteredPosts, displayName: bestName },
     };
   });
 }
 
 const { category } = Astro.params;
-const { posts } = Astro.props;
+const { posts, displayName } = Astro.props;
+const displayCategory = displayName || category;
 ---
-<Layout title={`Category: ${category}`}>
+<Layout title={`Category: ${displayCategory}`}>
   <section class="post-list">
-    <h2>Category: {category}</h2>
+    <h2>Category: {displayCategory}</h2>
     <ul>
       {posts.map(post => (
         <li>
