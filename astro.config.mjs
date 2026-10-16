@@ -15,6 +15,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   // IMPORTANT: Replace `https://example.com` with your actual domain.
   site: 'https://pu.code.mountos.com',
+  trailingSlash: 'always',
   integrations: [sitemap()],
   markdown: {
     processor: unified({
