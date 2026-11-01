@@ -3,12 +3,18 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Pagination from "../components/Pagination.astro";
 import Intro from "../components/Intro.astro";
+import { parsePostId, getPostUrl } from "../utils/post";
+import { getAlternateUrls, useTranslations } from "../utils/i18n";
 import type { Page } from "astro";
 
-export async function getStaticPaths({ paginate }) {
-  const allPosts = (await getCollection("blog")).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  );
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+  const allPosts = (await getCollection("blog"))
+    .filter((p) => {
+      const { lang } = parsePostId(p.id);
+      return lang === "zh-tw";
+    })
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
   return paginate(allPosts, { pageSize: 10 });
 }
 
@@ -17,25 +23,33 @@ interface Props {
 }
 
 const { page } = Astro.props;
+const t = useTranslations("zh-tw");
 
-const pageTitle = "Astro Pu  璞";
-const pageDescription = `The latest news from Mountos Institute${
-  page.currentPage > 1 ? ` | Page ${page.currentPage}` : ""
-}`;
+const pageTitle = page.currentPage > 1 
+  ? `${t('siteTitle')} | ${t('page', { page: page.currentPage })}`
+  : t('siteTitle');
+const pageDescription = t('siteDescription');
+const alternates = getAlternateUrls("", undefined, Astro.site?.toString());
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  {page.currentPage === 1 && <Intro slot="hero" />}
+<Layout 
+  title={pageTitle} 
+  description={pageDescription} 
+  lang="zh-tw"
+  alternates={alternates}
+  isHomepage={page.currentPage === 1}
+>
+  {page.currentPage === 1 && <Intro slot="hero" lang="zh-tw" />}
   <section class="post-list">
-    <h2>Latest Posts</h2>
+    <h2>{t('latestPosts')}</h2>
     <ul>
       {
         page.data.map((post) => (
           <li>
-            <a href={`/blog/${post.id.replace(/\.mdx?$/, '')}/`}>
+            <a href={getPostUrl(post)}>
               <span class="post-title">{post.data.title}</span>
               <span class="post-date">
-                {post.data.pubDate.toLocaleDateString("en-US")}
+                {post.data.pubDate.toLocaleDateString("zh-TW")}
               </span>
             </a>
           </li>
@@ -44,14 +58,14 @@ const pageDescription = `The latest news from Mountos Institute${
     </ul>
   </section>
 
-  <Pagination page={page} />
+  <Pagination page={page} lang="zh-tw" />
 </Layout>
 
 <style>
   .post-list h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
     padding-bottom: 1rem;
   }
   .post-list ul {
@@ -59,46 +73,30 @@ const pageDescription = `The latest news from Mountos Institute${
     padding: 0;
     margin: 0;
   }
-  .post-list li a {
+  .post-list li {
+    margin-bottom: 1.5rem;
+  }
+  .post-list a {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-radius: 8px;
+    align-items: baseline;
     text-decoration: none;
-    color: #333;
-    transition: all 0.2s ease;
-    margin-bottom: 0.5rem;
+    color: inherit;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border-color, #e5e7eb);
+    transition: color 0.2s;
   }
-  .post-list li a:hover {
-    background-color: var(--color-primary-light);
-    color: var(--color-primary-dark);
-    transform: translateX(4px);
+  .post-list a:hover {
+    color: var(--primary-color, #2563eb);
   }
   .post-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 500;
   }
   .post-date {
     font-size: 0.9rem;
-    color: #888;
-    font-variant-numeric: tabular-nums;
-  }
-
-  @media (min-width: 1024px) {
-    .post-list h2 {
-      font-size: 2.25rem;
-      margin-bottom: 2.5rem;
-    }
-    .post-list li a {
-      padding: 1.25rem 1.5rem;
-      border-radius: 10px;
-    }
-    .post-title {
-      font-size: 1.25rem;
-    }
-    .post-date {
-      font-size: 0.95rem;
-    }
+    color: var(--text-muted, #6b7280);
+    white-space: nowrap;
+    margin-left: 1rem;
   }
 </style>

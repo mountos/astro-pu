@@ -1,12 +1,15 @@
-
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import { parsePostId, getPostUrl } from '../../utils/post';
+import { useTranslations } from '../../utils/i18n';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
+  const zhTwPosts = posts.filter(p => parsePostId(p.id).lang === 'zh-tw');
   const tagMap = new Map();
-  for (const post of posts) {
+
+  for (const post of zhTwPosts) {
     for (const rawTag of (post.data.tags || [])) {
       if (!rawTag) continue;
       const slug = rawTag.toLowerCase();
@@ -14,47 +17,33 @@ export async function getStaticPaths() {
         tagMap.set(slug, {
           slug,
           displayName: rawTag,
-          postCounts: new Map(),
-          posts: new Set(),
+          posts: [],
         });
       }
-      const entry = tagMap.get(slug);
-      entry.posts.add(post);
-      entry.postCounts.set(rawTag, (entry.postCounts.get(rawTag) || 0) + 1);
+      tagMap.get(slug).posts.push(post);
     }
   }
 
-  return Array.from(tagMap.values()).map(entry => {
-    let bestName = entry.displayName;
-    let maxCount = 0;
-    for (const [name, count] of entry.postCounts.entries()) {
-      if (count > maxCount || (count === maxCount && /[A-Z]/.test(name) && !/[A-Z]/.test(bestName))) {
-        bestName = name;
-        maxCount = count;
-      }
-    }
-
-    const filteredPosts = Array.from(entry.posts);
-    return {
-      params: { tag: entry.slug },
-      props: { posts: filteredPosts, displayName: bestName },
-    };
-  });
+  return Array.from(tagMap.values()).map(entry => ({
+    params: { tag: entry.slug },
+    props: { posts: entry.posts, displayName: entry.displayName },
+  }));
 }
 
 const { tag } = Astro.params;
 const { posts, displayName } = Astro.props;
 const displayTag = displayName || tag;
+const t = useTranslations('zh-tw');
 ---
-<Layout title={`Tag: ${displayTag}`}>
+<Layout title={`${t('tag')}: ${displayTag}`} lang="zh-tw">
   <section class="post-list">
-    <h2>Tag: {displayTag}</h2>
+    <h2>{t('tag')}: {displayTag}</h2>
     <ul>
       {posts.map(post => (
         <li>
-          <a href={`/blog/${post.id.replace(/\.mdx?$/, '')}/`}>
+          <a href={getPostUrl(post)}>
             <span class="post-title">{post.data.title}</span>
-            <span class="post-date">{new Date(post.data.pubDate).toLocaleDateString('en-US')}</span>
+            <span class="post-date">{new Date(post.data.pubDate).toLocaleDateString('zh-TW')}</span>
           </a>
         </li>
       ))}
@@ -63,57 +52,41 @@ const displayTag = displayName || tag;
 </Layout>
 
 <style>
-	.post-list h2 {
-		font-size: 2rem;
-		margin-bottom: 2rem;
-		border-bottom: 1px solid #eee;
-		padding-bottom: 1rem;
-	}
-	.post-list ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-	.post-list li a {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1rem;
-		border-radius: 8px;
-		text-decoration: none;
-		color: #333;
-		transition: all 0.2s ease;
-		margin-bottom: 0.5rem;
-	}
-	.post-list li a:hover {
-		background-color: var(--color-primary-light);
-		color: var(--color-primary-dark);
-		transform: translateX(4px);
-	}
-	.post-title {
-		font-size: 1.2rem;
-		font-weight: 500;
-	}
-	.post-date {
-		font-size: 0.9rem;
-		color: #888;
-		font-variant-numeric: tabular-nums;
-	}
-
-	@media (min-width: 1024px) {
-		.post-list h2 {
-			font-size: 2.25rem;
-			margin-bottom: 2.5rem;
-		}
-		.post-list li a {
-			padding: 1.25rem 1.5rem;
-			border-radius: 10px;
-		}
-		.post-title {
-			font-size: 1.25rem;
-		}
-		.post-date {
-			font-size: 0.95rem;
-		}
-	}
+  .post-list h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    padding-bottom: 1rem;
+  }
+  .post-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .post-list li {
+    margin-bottom: 1.5rem;
+  }
+  .post-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border-color, #e5e7eb);
+    transition: color 0.2s;
+  }
+  .post-list a:hover {
+    color: var(--primary-color, #2563eb);
+  }
+  .post-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+  .post-date {
+    font-size: 0.9rem;
+    color: var(--text-muted, #6b7280);
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
 </style>

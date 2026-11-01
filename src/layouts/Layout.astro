@@ -4,59 +4,59 @@ import Footer from '../components/Footer.astro';
 import SEO from '../components/SEO.astro';
 import PWAInstallPrompt from '../components/PWAInstallPrompt.astro';
 import { ClientRouter } from 'astro:transitions';
+import { LANG_HTML, type Lang } from '../utils/i18n';
 import '../styles/global.css';
 
 interface Props {
-	title: string;
-	description?: string;
-	image?: string;
-	type?: 'website' | 'article';
-	article?: {
-		publishedTime: string;
-		modifiedTime?: string;
-		tags?: string[];
-		author?: string;
-	};
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    tags?: string[];
+    author?: string;
+  };
+  lang?: Lang;
+  alternates?: Record<string, string>;
+  isHomepage?: boolean;
 }
 
 const { 
-	title = 'Astro Pu', 
-	description = '開啟你的 AI 搜尋優化時代。',
-	image,
-	type,
-	article
+  title = 'Astro Pu', 
+  description,
+  image,
+  type,
+  article,
+  lang = 'zh-tw',
+  alternates,
+  isHomepage = false,
 } = Astro.props;
 
-const isHomepage = Astro.url.pathname === '/';
+const htmlLang = LANG_HTML[lang] || 'zh-TW';
 ---
 <!doctype html>
-<html lang="en">
-	<head>
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBBEBZXT0S" is:inline></script>
-		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'G-BBBEBZXT0S');
-		</script>
-		<SEO 
-			title={title} 
-			description={description} 
-			image={image} 
-			type={type} 
-			article={article} 
-		/>
-		<ClientRouter />
-	</head>
-	<body>
-		<Header isHomepage={isHomepage} />
-		<slot name="hero" />
-		<main class="main-content">
-			<slot />
-		</main>
-		<Footer />
-		<PWAInstallPrompt />
-	</body>
+<html lang={htmlLang}>
+  <head>
+    <SEO 
+      title={title} 
+      description={description} 
+      image={image} 
+      type={type} 
+      article={article}
+      lang={lang}
+      alternates={alternates}
+    />
+    <ClientRouter />
+  </head>
+  <body>
+    <Header isHomepage={isHomepage} lang={lang} alternates={alternates} />
+    <slot name="hero" />
+    <main class="main-content">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <PWAInstallPrompt />
+  </body>
 </html>

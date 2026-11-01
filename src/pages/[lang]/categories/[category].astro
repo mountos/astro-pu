@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import { parsePostId, getPostUrl } from '../../../utils/post';
+import { useTranslations, type Lang } from '../../../utils/i18n';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const locales: Lang[] = ['sc', 'en', 'ja'];
+  const paths = [];
+
+  for (const locale of locales) {
+    const langPosts = posts.filter(p => parsePostId(p.id).lang === locale);
+    const catMap = new Map();
+
+    for (const post of langPosts) {
+      for (const rawCat of (post.data.categories || [])) {
+        if (!rawCat) continue;
+        const slug = rawCat.toLowerCase();
+        if (!catMap.has(slug)) {
+          catMap.set(slug, {
+            slug,
+            displayName: rawCat,
+            posts: [],
+          });
+        }
+        catMap.get(slug).posts.push(post);
+      }
+    }
+
+    for (const entry of catMap.values()) {
+      paths.push({
+        params: { lang: locale, category: entry.slug },
+        props: { posts: entry.posts, displayName: entry.displayName },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, category } = Astro.params;
+const { posts, displayName } = Astro.props;
+const currentLang = (lang as Lang) || 'en';
+const displayCategory = displayName || category;
+const t = useTranslations(currentLang);
+const dateLocale = currentLang === 'en' ? 'en-US' : (currentLang === 'ja' ? 'ja-JP' : 'zh-CN');
+---
+<Layout title={`${t('category')}: ${displayCategory}`} lang={currentLang}>
+  <section class="post-list">
+    <h2>{t('category')}: {displayCategory}</h2>
+    <ul>
+      {posts.map(post => (
+        <li>
+          <a href={getPostUrl(post)}>
+            <span class="post-title">{post.data.title}</span>
+            <span class="post-date">{new Date(post.data.pubDate).toLocaleDateString(dateLocale)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .post-list h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    padding-bottom: 1rem;
+  }
+  .post-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .post-list li {
+    margin-bottom: 1.5rem;
+  }
+  .post-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border-color, #e5e7eb);
+    transition: color 0.2s;
+  }
+  .post-list a:hover {
+    color: var(--primary-color, #2563eb);
+  }
+  .post-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+  .post-date {
+    font-size: 0.9rem;
+    color: var(--text-muted, #6b7280);
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+</style>

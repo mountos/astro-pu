@@ -1,22 +1,55 @@
 ---
 import Layout from './Layout.astro';
 import ToC from '../components/ToC.astro';
-const { frontmatter, headings } = Astro.props;
+import { LANG_PREFIX, useTranslations, type Lang } from '../utils/i18n';
+import { getPostHeroImage } from '../utils/post';
+
+interface Props {
+  frontmatter: any;
+  headings: any[];
+  lang?: Lang;
+  alternates?: Record<string, string>;
+  post?: any;
+}
+
+const { frontmatter, headings, lang = 'zh-tw', alternates, post } = Astro.props;
+const t = useTranslations(lang);
+const prefix = LANG_PREFIX[lang];
 
 const hasHeadings = headings.filter(h => h.depth > 1 && h.depth < 4).length > 0;
 const primaryCategory = frontmatter.categories?.[0];
----
-<Layout title={`${frontmatter.title}`} description={frontmatter.description}>
+const heroImg = post ? getPostHeroImage(post) : (frontmatter.heroImage ? frontmatter.heroImage.replace(/^\.\//, '') : '');
 
-  {frontmatter.heroImage &&
+const dateLocale = lang === 'en' ? 'en-US' : (lang === 'ja' ? 'ja-JP' : (lang === 'sc' ? 'zh-CN' : 'zh-TW'));
+---
+<Layout 
+  title={`${frontmatter.title}`} 
+  description={frontmatter.description}
+  type="article"
+  lang={lang}
+  alternates={alternates}
+  image={heroImg}
+  article={{
+    publishedTime: new Date(frontmatter.pubDate).toISOString(),
+    modifiedTime: frontmatter.updatedDate ? new Date(frontmatter.updatedDate).toISOString() : undefined,
+    tags: frontmatter.tags,
+    author: frontmatter.author || 'Mountos',
+  }}
+>
+
+  {heroImg &&
     <div slot="hero" class="hero-background-container">
-      <div class="hero-image" style={`background-image: url(${frontmatter.heroImage})`}></div>
+      <div class="hero-image" style={`background-image: url(${heroImg})`}></div>
       <div class="hero-overlay"></div>
     </div>
   }
 
   <div class="hero-foreground-content">
-    {primaryCategory && <p class="hero-category">{primaryCategory}</p>}
+    {primaryCategory && (
+      <a href={`${prefix}/categories/${encodeURIComponent(primaryCategory)}/`} class="hero-category">
+        {primaryCategory}
+      </a>
+    )}
     <h1 class="hero-title">{frontmatter.title}</h1>
   </div>
 
@@ -24,9 +57,15 @@ const primaryCategory = frontmatter.categories?.[0];
     <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
       <div class="post-meta-bar">
         <div class="meta-item">
-          <span class="label">Posted on</span>
-          <span class="value">{new Date(frontmatter.pubDate).toLocaleDateString('en-US')}</span>
+          <span class="label">{t('postedOn')}</span>
+          <span class="value">{new Date(frontmatter.pubDate).toLocaleDateString(dateLocale)}</span>
         </div>
+        {frontmatter.updatedDate && (
+          <div class="meta-item">
+            <span class="label">{t('updatedOn')}</span>
+            <span class="value">{new Date(frontmatter.updatedDate).toLocaleDateString(dateLocale)}</span>
+          </div>
+        )}
       </div>
 
       <div class="content" itemprop="articleBody">
@@ -36,9 +75,9 @@ const primaryCategory = frontmatter.categories?.[0];
       {frontmatter.tags?.length > 0 &&
         <footer class="post-footer">
           <div class="tags-list">
-            <span>Tags</span>
+            <span>{t('tags')}</span>
             {frontmatter.tags.map((tag: string) => (
-              <a href={`/tags/${tag}`}>{tag}</a>
+              <a href={`${prefix}/tags/${encodeURIComponent(tag)}/`}>{tag}</a>
             ))}
           </div>
         </footer>
@@ -58,161 +97,10 @@ const primaryCategory = frontmatter.categories?.[0];
     padding: 0 !important;
     max-width: none !important;
     width: 100% !important;
-    background-color: var(--color-background); /* Ensure content has a background */
-    position: relative; /* Needed for z-index to work */
-    z-index: 10; /* Ensure content is above the background hero */
-  }
-
-  /* --- Hero as Background --- */
-  .hero-background-container {
-    position: fixed; /* Fix it to the viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh; /* Full viewport height */
-    z-index: -1; /* Send it to the very back */
-  }
-  .hero-image {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-  }
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-  }
-
-  /* --- Foreground Content (Title that scrolls) --- */
-  .hero-foreground-content {
-    color: white;
-    text-align: center;
-    padding: 10rem 1.5rem 5rem; /* Large padding to create space */
-    position: relative;
-    z-index: 5; /* Above the background hero, below main content */
   }
   .hero-category {
-    font-size: 1rem;
+    color: var(--primary-color, #2563eb);
+    text-decoration: none;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin: 0 0 0.5rem 0;
-    opacity: 0.9;
-  }
-  .hero-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  @media (max-width: 768px) {
-    .hero-title {
-      font-size: 2.5rem;
-    }
-  }
-
-  /* --- Main Content Layout --- */
-  .blog-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4rem;
-    width: 100%;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 3rem 1.5rem;
-    background-color: var(--color-background); /* White background for the scrolling part */
-  }
-
-  @media (min-width: 1024px) {
-    .blog-container {
-      grid-template-columns: minmax(0, 1fr) 280px;
-      gap: 5rem;
-      padding: 3.5rem 2.5rem;
-    }
-  }
-
-  .post {
-    max-width: 820px;
-    width: 100%;
-    justify-self: start;
-  }
-
-  .post-meta-bar {
-    border-top: 1px solid #f0f0f0;
-    border-bottom: 1px solid #f0f0f0;
-    padding: 1rem 0;
-    margin-bottom: 3rem;
-    display: flex;
-    gap: 2rem;
-    font-size: 0.9rem;
-  }
-  .meta-item .label {
-    color: #888;
-  }
-  .meta-item .value {
-    color: #333;
-    font-weight: 500;
-  }
-
-  .content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #333;
-  }
-
-  .post-footer {
-    margin-top: 5rem;
-    padding: 2rem;
-    background-color: #f9f9f9; /* Subtle gray as requested/seen in screenshot */
-    border-radius: 12px;
-    border: 1px solid #eee;
-  }
-  .tags-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
-  }
-  .tags-list span {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-right: 0.5rem;
-  }
-  .tags-list a {
-    display: inline-block;
-    padding: 0.35rem 0.85rem;
-    background-color: var(--color-primary-soft);
-    color: var(--color-primary-dark);
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  .tags-list a:hover {
-    background-color: var(--color-primary);
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
-  }
-  
-  .toc-container {
-    display: none;
-  }
-  @media (min-width: 1024px) {
-    .toc-container {
-      display: block;
-    }
   }
 </style>

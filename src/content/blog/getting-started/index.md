@@ -1,15 +1,16 @@
 ---
 title: "歡迎使用 Astro 模板 PU 璞"
-description: "這是一篇介紹此模板功能的範例文章。您可以在這裡學習如何使用 Markdown 來撰寫您的內容。"
+description: "這是一篇介紹此模板功能的範例文章。您可以在這裡學習如何使用 Markdown 與 Page Bundle 來撰寫您的內容。"
 pubDate: 2026-01-05T12:00:00Z
 categories: ["教學"]
 tags: ["Astro", "模板", "Markdown"]
-heroImage: "../../assets/shared/MOUNTOS-Feature-HeroImage.png"
+heroImage: "./hero.png"
+lang: "zh-tw"
 ---
 
 歡迎來到您的新網站！這是一個使用 [Mountos Astro 基本模板：PU 璞](https://pu.code.mountos.com) 建立的示範頁面。您可以自由編輯或刪除這篇文章。
 
-這篇文章的目的是展示您可以使用 Markdown 撰寫的各種內容格式，以及這個模板內建的各種功能。
+這篇文章的目的是展示您可以使用 Markdown 與 Page Bundle 架構撰寫的各種內容格式，以及這個模板內建的各種功能。
 
 ## 這是一個 H2 標題
 
@@ -50,9 +51,9 @@ greet('Astro');
 
 #### 圖片
 
-在 Markdown 中插入圖片也非常簡單。
+在 Page Bundle 架構中，圖片與文章 Markdown 存放在同一個目錄下，直接使用相對路徑引用即可：
 
-![這是一個圖片的 ALT 描述文字](../../assets/shared/MOUNTOS-Feature-HeroImage.png)
+![示範首圖](./hero.png)
 
 ---
 

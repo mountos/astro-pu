@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from "astro:content";
+import BlogPostLayout from "../layouts/BlogPostLayout.astro";
+import { parsePostId } from "../utils/post";
+import { getAlternateUrls, type Lang } from "../utils/i18n";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const zhTwPosts = posts.filter((p) => {
+    const { lang } = parsePostId(p.id);
+    return lang === "zh-tw";
+  });
+
+  // 保留字路徑，避免與靜態頁面衝突
+  const reservedSlugs = new Set([
+    "about",
+    "contact",
+    "privacy",
+    "search",
+    "categories",
+    "tags",
+    "404",
+  ]);
+
+  // 建立「slug → 實際存在的語系」對照表，產生正確的 hreflang alternates
+  const langsBySlug = new Map<string, Set<Lang>>();
+  for (const p of posts) {
+    const { slug: s, lang: l } = parsePostId(p.id);
+    if (!langsBySlug.has(s)) langsBySlug.set(s, new Set());
+    langsBySlug.get(s)!.add(l);
+  }
+
+  return zhTwPosts
+    .filter((post) => {
+      const { slug } = parsePostId(post.id);
+      return !reservedSlugs.has(slug);
+    })
+    .map((post) => {
+      const { slug } = parsePostId(post.id);
+      return {
+        params: { slug },
+        props: {
+          post,
+          slug,
+          availableLangs: Array.from(
+            langsBySlug.get(slug) ?? new Set<Lang>(["zh-tw"]),
+          ),
+        },
+      };
+    });
+}
+
+const { post, slug, availableLangs } = Astro.props;
+const { Content, headings } = await render(post);
+const alternates = getAlternateUrls(slug, availableLangs, Astro.site?.toString());
+---
+
+<BlogPostLayout
+  frontmatter={post.data}
+  headings={headings}
+  lang="zh-tw"
+  alternates={alternates}
+  post={post}
+>
+  <Content />
+</BlogPostLayout>

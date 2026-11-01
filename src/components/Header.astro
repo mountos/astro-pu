@@ -1,34 +1,124 @@
 ---
+import { LANG_PREFIX, LANG_LABELS, SUPPORTED_LANGS, useTranslations, type Lang } from '../utils/i18n';
+
+interface Props {
+  isHomepage?: boolean;
+  siteTitle?: string;
+  siteDescription?: string;
+  lang?: Lang;
+  alternates?: Record<string, string>;
+}
+
 const { 
   isHomepage = false,
-	siteTitle = "Your Website", 
-	siteDescription = "A short description of your website."
+  siteTitle,
+  siteDescription,
+  lang = 'zh-tw',
+  alternates,
 } = Astro.props;
+
+const t = useTranslations(lang);
+const title = siteTitle || t('siteTitle');
+const desc = siteDescription || t('siteDescription');
+const prefix = LANG_PREFIX[lang];
+const homeUrl = prefix ? `${prefix}/` : '/';
+const contactUrl = `${prefix}/contact/`;
+const searchUrl = `${prefix}/search/`;
 ---
 <header>
   <div class="header-container">
     <div class="site-branding">
-      <a href="/" class="logo-link">
+      <a href={homeUrl} class="logo-link">
         <img src="/images/Mountos-Logo.png" alt="Mountos Logo" class="site-logo" />
         <div class="site-text">
           {isHomepage ? (
-            <h1 class="site-title">{siteTitle}</h1>
+            <h1 class="site-title">{title}</h1>
           ) : (
-            <div class="site-title">{siteTitle}</div>
+            <div class="site-title">{title}</div>
           )}
-          <p class="site-description">{siteDescription}</p>
+          <p class="site-description">{desc}</p>
         </div>
       </a>
     </div>
     <nav class="nav-buttons">
-      <a href="https://github.com/mountos/astro-pu" class="nav-link" rel="nofollow">GitHub</a>
-      <a href="/contact" class="nav-link">Contact</a>
-      <a href="/search" class="nav-link search-link" aria-label="Search">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+      <a href="https://github.com/mountos/astro-pu" class="nav-link" rel="nofollow noopener noreferrer" target="_blank">GitHub</a>
+      <a href={contactUrl} class="nav-link">{t('contactUs')}</a>
+      <a href={searchUrl} class="nav-link search-link" aria-label={t('siteSearch')}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </a>
+      <div class="lang-switcher">
+        <span class="lang-current" aria-haspopup="true">{LANG_LABELS[lang]} ▾</span>
+        <div class="lang-dropdown">
+          {SUPPORTED_LANGS.map((targetLang) => {
+            let targetUrl = LANG_PREFIX[targetLang] ? `${LANG_PREFIX[targetLang]}/` : '/';
+            if (alternates) {
+              const hreflangKey = targetLang === 'zh-tw' ? 'zh-TW' : (targetLang === 'sc' ? 'zh-Hans' : targetLang);
+              if (alternates[hreflangKey]) {
+                targetUrl = alternates[hreflangKey];
+              }
+            }
+            return (
+              <a href={targetUrl} class={`lang-item ${targetLang === lang ? 'active' : ''}`}>
+                {LANG_LABELS[targetLang]}
+              </a>
+            );
+          })}
+        </div>
+      </div>
     </nav>
   </div>
 </header>
+
+<style>
+  .lang-switcher {
+    position: relative;
+    display: inline-block;
+  }
+  .lang-current {
+    cursor: pointer;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 4px;
+    user-select: none;
+    transition: background-color 0.2s;
+  }
+  .lang-current:hover {
+    background-color: var(--hover-bg, #f3f4f6);
+  }
+  .lang-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.3rem;
+    background: #ffffff;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-width: 110px;
+    z-index: 100;
+  }
+  .lang-switcher:hover .lang-dropdown,
+  .lang-switcher:focus-within .lang-dropdown {
+    display: flex;
+    flex-direction: column;
+  }
+  .lang-item {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .lang-item:hover {
+    background-color: #f3f4f6;
+  }
+  .lang-item.active {
+    font-weight: 600;
+    color: var(--primary-color, #2563eb);
+  }
+</style>

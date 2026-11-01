@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from "astro:content";
+import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
+import { parsePostId } from "../../utils/post";
+import { getAlternateUrls, type Lang } from "../../utils/i18n";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const locales = ["sc", "en", "ja"] as const;
+  const paths = [];
+
+  const reservedSlugs = new Set([
+    "about",
+    "contact",
+    "privacy",
+    "search",
+    "categories",
+    "tags",
+    "404",
+  ]);
+
+  const langsBySlug = new Map<string, Set<Lang>>();
+  for (const p of posts) {
+    const { slug: s, lang: l } = parsePostId(p.id);
+    if (!langsBySlug.has(s)) langsBySlug.set(s, new Set());
+    langsBySlug.get(s)!.add(l);
+  }
+
+  for (const locale of locales) {
+    const langPosts = posts.filter((p) => {
+      const { lang } = parsePostId(p.id);
+      return lang === locale;
+    });
+
+    for (const post of langPosts) {
+      const { slug } = parsePostId(post.id);
+      if (reservedSlugs.has(slug)) continue;
+      paths.push({
+        params: { lang: locale, slug },
+        props: {
+          post,
+          slug,
+          availableLangs: Array.from(langsBySlug.get(slug) ?? [locale]),
+        },
+      });
+    }
+  }
+  return paths;
+}
+
+const { post, slug, availableLangs } = Astro.props;
+const { lang } = Astro.params;
+const { Content, headings } = await render(post);
+const alternates = getAlternateUrls(slug, availableLangs, Astro.site?.toString());
+---
+
+<BlogPostLayout
+  frontmatter={post.data}
+  headings={headings}
+  lang={lang as Lang}
+  alternates={alternates}
+  post={post}
+>
+  <Content />
+</BlogPostLayout>

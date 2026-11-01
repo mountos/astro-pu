@@ -1,0 +1,118 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Pagination from "../../components/Pagination.astro";
+import Intro from "../../components/Intro.astro";
+import { parsePostId, getPostUrl } from "../../utils/post";
+import { getAlternateUrls, useTranslations, type Lang } from "../../utils/i18n";
+import type { Page } from "astro";
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+  const posts = await getCollection("blog");
+  const locales: Lang[] = ["sc", "en", "ja"];
+  const paths = [];
+
+  for (const locale of locales) {
+    const langPosts = posts
+      .filter((p) => {
+        const { lang } = parsePostId(p.id);
+        return lang === locale;
+      })
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    const paginated = paginate(langPosts, {
+      params: { lang: locale },
+      pageSize: 10,
+    });
+    paths.push(...paginated);
+  }
+
+  return paths;
+}
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = Astro.params;
+const currentLang = (lang as Lang) || 'en';
+const t = useTranslations(currentLang);
+
+const pageTitle = page.currentPage > 1 
+  ? `${t('siteTitle')} | ${t('page', { page: page.currentPage })}`
+  : t('siteTitle');
+const pageDescription = t('siteDescription');
+const alternates = getAlternateUrls("", undefined, Astro.site?.toString());
+
+const dateLocale = currentLang === 'en' ? 'en-US' : (currentLang === 'ja' ? 'ja-JP' : 'zh-CN');
+---
+
+<Layout 
+  title={pageTitle} 
+  description={pageDescription} 
+  lang={currentLang}
+  alternates={alternates}
+  isHomepage={page.currentPage === 1}
+>
+  {page.currentPage === 1 && <Intro slot="hero" lang={currentLang} />}
+  <section class="post-list">
+    <h2>{t('latestPosts')}</h2>
+    <ul>
+      {
+        page.data.map((post) => (
+          <li>
+            <a href={getPostUrl(post)}>
+              <span class="post-title">{post.data.title}</span>
+              <span class="post-date">
+                {post.data.pubDate.toLocaleDateString(dateLocale)}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <Pagination page={page} lang={currentLang} />
+</Layout>
+
+<style>
+  .post-list h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    padding-bottom: 1rem;
+  }
+  .post-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .post-list li {
+    margin-bottom: 1.5rem;
+  }
+  .post-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border-color, #e5e7eb);
+    transition: color 0.2s;
+  }
+  .post-list a:hover {
+    color: var(--primary-color, #2563eb);
+  }
+  .post-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+  .post-date {
+    font-size: 0.9rem;
+    color: var(--text-muted, #6b7280);
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+</style>
