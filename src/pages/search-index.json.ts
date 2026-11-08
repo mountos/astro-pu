@@ -1,32 +1,54 @@
 import { getCollection } from 'astro:content';
 import { parsePostId, getPostUrl } from '../utils/post';
 
+function cleanMarkdown(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/^---[\s\S]*?---\s*/, '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[#*~_>=\-+|]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function GET() {
   let posts: any[] = [];
   try {
     posts = await getCollection('blog');
   } catch (e) {
-    console.warn('No blog collection found');
+    console.warn('No blog collection found:', e);
   }
   
   const index = posts.map(post => {
     const { slug, lang } = parsePostId(post.id);
-    const bodyText = post.body ? post.body.substring(0, 300).replace(/\n/g, ' ').replace(/[#*>_\-\[\]]/g, '') : '';
+    const cleanedBody = cleanMarkdown(post.body || '');
+    const description = (post.data.description || '').trim();
+    const excerpt = description || cleanedBody.substring(0, 160);
+    const postLang = (post.data.lang || lang || 'zh-tw').toLowerCase();
+    const normalizedLang = (postLang === 'zh' || postLang === 'zh-hant') ? 'zh-tw' : postLang;
+
     return {
       id: slug,
-      title: post.data.title,
+      title: (post.data.title || '').trim(),
       author: post.data.author || 'Mountos',
-      excerpt: (post.data.description || bodyText.substring(0, 150)),
+      excerpt: excerpt,
+      content: cleanedBody,
       url: getPostUrl(post),
-      lang: post.data.lang || lang || 'zh-tw',
+      lang: normalizedLang,
       categories: post.data.categories || [],
       tags: post.data.tags || [],
+      date: post.data.pubDate ? new Date(post.data.pubDate).toISOString().split('T')[0] : '',
     };
   });
 
   return new Response(JSON.stringify(index), {
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
     }
   });
 }
