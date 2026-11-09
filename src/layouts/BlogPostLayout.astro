@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import ToC from '../components/ToC.astro';
+import SubscribeWidget from '../components/SubscribeWidget.astro';
 import { LANG_PREFIX, useTranslations, type Lang } from '../utils/i18n';
 import { getPostHeroImage } from '../utils/post';
 
@@ -70,6 +71,7 @@ const dateLocale = lang === 'en' ? 'en-US' : (lang === 'ja' ? 'ja-JP' : (lang ==
 
       <div class="content" itemprop="articleBody">
         <slot />
+        <SubscribeWidget lang={lang} />
       </div>
 
       {frontmatter.tags?.length > 0 &&
